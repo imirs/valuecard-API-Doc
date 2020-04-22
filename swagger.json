@@ -1811,7 +1811,7 @@
         }
       }
     },
-    "/api/PosBudget/LoadBudgetQuery": {
+    "/api/Budget/LoadBudgetQuery": {
       "post": {
         "tags": [
           "PosBudget"
@@ -1821,6 +1821,9 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/LoadBudgetParameters"
+              },
+              "examples": {
+                "example-1": {}
               }
             },
             "text/json": {
@@ -1857,8 +1860,11 @@
             }
           }
         },
-        "summary": "LoadBudgetQuery"
-      }
+        "summary": "LoadBudgetQuery",
+        "description": "lorem ipsum akdsd sdfasdf asdf asdf as df asdfasdfasd",
+        "operationId": ""
+      },
+      "parameters": []
     },
     "/api/PosBudget/LoadBudgetCommitQuery": {
       "post": {
