@@ -1861,7 +1861,8 @@
         "description": "lorem ipsum akdsd sdfasdf asdf asdf as df asdfasdfasd",
         "operationId": "",
         "tags": [
-          "Budget"
+          "Budget",
+          "test"
         ]
       },
       "parameters": []
