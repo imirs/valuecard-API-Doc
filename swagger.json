@@ -1813,9 +1813,6 @@
     },
     "/api/Budget/LoadBudgetQuery": {
       "post": {
-        "tags": [
-          "PosBudget"
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1862,7 +1859,10 @@
         },
         "summary": "LoadBudgetQuery",
         "description": "lorem ipsum akdsd sdfasdf asdf asdf as df asdfasdfasd",
-        "operationId": ""
+        "operationId": "",
+        "tags": [
+          "Budget"
+        ]
       },
       "parameters": []
     },
