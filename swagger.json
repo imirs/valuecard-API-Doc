@@ -2,16 +2,11 @@
   "openapi": "3.0.1",
   "info": {
     "title": "ValueCard",
-    "description": "# Introduction\nWelcome to the reference for the Zuora REST API!\n\n\n\nIn addition to Zuora API Reference, we also provide API references for other Zuora products:\n\n## Zuora Collect API Reference\nRevPro API Reference\nThe Zuora REST API provides a broad set of operations and resources that:\n\nEnable Web Storefront integration from your website.\nSupport self-service subscriber sign-ups and account management.\nProcess revenue schedules through custom revenue rule models.\nEnable manipulation of most objects in the Zuora Object Model.\nWant to share your opinion on how our API works for you? Tell us how you feel about using our API and what we can do to make it better.\n\nAccess to the API\nIf you have a Zuora tenant, you can access the Zuora REST API via one of the following endpoints:\n\nTenant\tBase URL for REST Endpoints\nUS Production\thttps://rest.zuora.com\nUS API Sandbox\thttps://rest.apisandbox.zuora.com\nUS Performance Test\thttps://rest.pt1.zuora.com\nUS Production Copy\tSubmit a request at Zuora Global Support to enable the Zuora REST API in your tenant and obtain the base URL for REST endpoints. See REST endpoint base URL of Production Copy (Service) Environment for existing and new customers for more information.\nEU Production\thttps://rest.eu.zuora.com\nEU Sandbox\thttps://rest.sandbox.eu.zuora.com\nThe Production endpoint provides access to your live user data. API Sandbox tenants are a good place to test code without affecting real-world data. If you would like Zuora to provision an API Sandbox tenant for you, contact your Zuora representative for assistance.\n\nIf you do not have a Zuora tenant, go to https://www.zuora.com/resource/zuora-test-drive and sign up for a Production Test Drive tenant. The tenant comes with seed data, including a sample product catalog.\n\nAPI Changelog\nYou can find the Changelog of the API Reference in the Zuora Community.\n\nAuthentication\nOAuth v2.0\nZuora recommends that you use OAuth v2.0 to authenticate to the Zuora REST API. Currently, OAuth is not available in every environment. See Zuora Testing Environments for more information.\n\nZuora recommends you to create a dedicated API user with API write access on a tenant when authenticating via OAuth, and then create an OAuth client for this user. See Create an API User for how to do this. By creating a dedicated API user, you can control permissions of the API user without affecting other non-API users.\n\nIf a user is deactivated, all of the user's OAuth clients will be automatically deactivated.\n\nAuthenticating via OAuth requires the following steps:\n\nCreate a Client\nGenerate a Token\nMake Authenticated Requests\nCreate a Client\nYou must first create an OAuth client in the Zuora UI. To do this, you must be an administrator of your Zuora tenant. This is a one-time operation. You will be provided with a Client ID and a Client Secret. Please note this information down, as it will be required for the next step.\n\nNote: The OAuth client will be owned by a Zuora user account. If you want to perform PUT, POST, or DELETE operations using the OAuth client, the owner of the OAuth client must have a Platform role that includes the \"API Write Access\" permission.\n\nGenerate a Token\nAfter creating a client, you must make a call to obtain a bearer token using the Generate an OAuth token operation. This operation requires the following parameters:\n\nclient_id - the Client ID displayed when you created the OAuth client in the previous step\nclient_secret - the Client Secret displayed when you created the OAuth client in the previous step\ngrant_type - must be set to client_credentials\nNote: The Client ID and Client Secret mentioned above were displayed when you created the OAuth Client in the prior step. The Generate an OAuth token response specifies how long the bearer token is valid for. You should reuse the bearer token until it is expired. When the token is expired, call Generate an OAuth token again to generate a new one.\n\nMake Authenticated Requests\nTo authenticate subsequent API requests, you must provide a valid bearer token in an HTTP header:\n\nAuthorization: Bearer {bearer_token}\n\nIf you have Zuora Multi-entity enabled, you need to set an additional header to specify the ID of the entity that you want to access. You can use the scope field in the Generate an OAuth token response to determine whether you need to specify an entity ID.\n\nIf the scope field contains more than one entity ID, you must specify the ID of the entity that you want to access. For example, if the scope field contains entity.1a2b7a37-3e7d-4cb3-b0e2-883de9e766cc and entity.c92ed977-510c-4c48-9b51-8d5e848671e9, specify one of the following headers:\n\nZuora-Entity-Ids: 1a2b7a37-3e7d-4cb3-b0e2-883de9e766cc\nZuora-Entity-Ids: c92ed977-510c-4c48-9b51-8d5e848671e9\nNote: For a limited period of time, Zuora will accept the entityId header as an alternative to the Zuora-Entity-Ids header. If you choose to set the entityId header, you must remove all \"-\" characters from the entity ID in the scope field.\n\nIf the scope field contains a single entity ID, you do not need to specify an entity ID.\n\nOther Supported Authentication Schemes\nZuora continues to support the following additional legacy means of authentication:\n\nUse username and password. Include authentication with each request in the header:\n\napiAccessKeyId\napiSecretAccessKey\nZuora recommends that you create an API user specifically for making API calls. See Create an API User for more information.\n\nUse an authorization cookie. The cookie authorizes the user to make calls to the REST API for the duration specified in Administration > Security Policies > Session timeout. The cookie expiration time is reset with this duration after every call to the REST API. To obtain a cookie, call the Connections resource with the following API user information:\n\nID\nPassword\nFor CORS-enabled APIs only: Include a 'single-use' token in the request header, which re-authenticates the user with each request. See below for more details.\n\nEntity Id and Entity Name\nThe entityId and entityName parameters are only used for Zuora Multi-entity. These are the legacy parameters that Zuora will only continue to support for a period of time. Zuora recommends you to use the Zuora-Entity-Ids parameter instead.\n\nThe entityId and entityName parameters specify the Id and the name of the entity that you want to access, respectively. Note that you must have permission to access the entity.\n\nYou can specify either the entityId or entityName parameter in the authentication to access and view an entity.\n\nIf both entityId and entityName are specified in the authentication, an error occurs.\nIf neither entityId nor entityName is specified in the authentication, you will log in to the entity in which your user account is created.\nTo get the entity Id and entity name, you can use the GET Entities REST call. For more information, see API User Authentication.\n\nToken Authentication for CORS-Enabled APIs\nThe CORS mechanism enables REST API calls to Zuora to be made directly from your customer's browser, with all credit card and security information transmitted directly to Zuora. This minimizes your PCI compliance burden, allows you to implement advanced validation on your payment forms, and makes your payment forms look just like any other part of your website.\n\nFor security reasons, instead of using cookies, an API request via CORS uses tokens for authentication.\n\nThe token method of authentication is only designed for use with requests that must originate from your customer's browser; it should not be considered a replacement to the existing cookie authentication mechanism.\n\nSee Zuora CORS REST for details on how CORS works and how you can begin to implement customer calls to the Zuora REST APIs. See HMAC Signatures for details on the HMAC method that returns the authentication token.\n\nRequests and Responses\nRequest IDs\nAs a general rule, when asked to supply a \"key\" for an account or subscription (accountKey, account-key, subscriptionKey, subscription-key), you can provide either the actual ID or the number of the entity.\n\nHTTP Request Body\nMost of the parameters and data accompanying your requests will be contained in the body of the HTTP request.\n\nThe Zuora REST API accepts JSON in the HTTP request body. No other data format (e.g., XML) is supported.\n\nData Type\n(Actions and CRUD operations only) We recommend that you do not specify the decimal values with quotation marks, commas, and spaces. Use characters of +-0-9.eE, for example, 5, 1.9, -8.469, and 7.7e2. Also, Zuora does not convert currencies for decimal values.\n\nTesting a Request\nUse a third party client, such as curl, Postman, or Advanced REST Client, to test the Zuora REST API.\n\nYou can test the Zuora REST API from the Zuora API Sandbox or Production tenants. If connecting to Production, bear in mind that you are working with your live production data, not sample data or test data.\n\nTesting with Credit Cards\nSooner or later it will probably be necessary to test some transactions that involve credit cards. For suggestions on how to handle this, see Going Live With Your Payment Gateway.\n\nConcurrent Request Limits\nZuora enforces tenant-level concurrent request limits. See Concurrent Request Limits for more information.\n\nTimeout Limit\nIf a request does not complete within 120 seconds, the request times out and Zuora returns a Gateway Timeout error.\n\nError Handling\nResponses and error codes are detailed in Responses and errors.\n\nPagination\nWhen retrieving information (using GET methods), the optional pageSize query parameter sets the maximum number of rows to return in a response. The maximum is 40; larger values are treated as 40. If this value is empty or invalid, pageSize typically defaults to 10.\n\nThe default value for the maximum number of rows retrieved can be overridden at the method level.\n\nIf more rows are available, the response will include a nextPage element, which contains a URL for requesting the next page. If this value is not provided, no more rows are available. No \"previous page\" element is explicitly provided; to support backward paging, use the previous call.\n\nArray Size\nFor data items that are not paginated, the REST API supports arrays of up to 300 rows. Thus, for instance, repeated pagination can retrieve thousands of customer accounts, but within any account an array of no more than 300 rate plans is returned.\n\nAPI Versions\nThe Zuora REST API are version controlled. Versioning ensures that Zuora REST API changes are backward compatible. Zuora uses a major and minor version nomenclature to manage changes. By specifying a version in a REST request, you can get expected responses regardless of future changes to the API.\n\nMajor Version\nThe major version number of the REST API appears in the REST URL. Currently, Zuora only supports the v1 major version. For example, POST https://rest.zuora.com/v1/subscriptions.\n\nMinor Version\nZuora uses minor versions for the REST API to control small changes. For example, a field in a REST method is deprecated and a new field is used to replace it.\n\nSome fields in the REST methods are supported as of minor versions. If a field is not noted with a minor version, this field is available for all minor versions. If a field is noted with a minor version, this field is in version control. You must specify the supported minor version in the request header to process without an error.\n\nIf a field is in version control, it is either with a minimum minor version or a maximum minor version, or both of them. You can only use this field with the minor version between the minimum and the maximum minor versions. For example, the invoiceCollect field in the POST Subscription method is in version control and its maximum minor version is 189.0. You can only use this field with the minor version 189.0 or earlier.\n\nIf you specify a version number in the request header that is not supported, Zuora will use the minimum minor version of the REST API. In our REST API documentation, if a field or feature requires a minor version number, we note that in the field description.\n\nYou only need to specify the version number when you use the fields require a minor version. To specify the minor version, set the zuora-version parameter to the minor version number in the request header for the request call. For example, the collect field is in 196.0 minor version. If you want to use this field for the POST Subscription method, set the zuora-version parameter to 196.0 in the request header. The zuora-version parameter is case sensitive.\n\nFor all the REST API fields, by default, if the minor version is not specified in the request header, Zuora will use the minimum minor version of the REST API to avoid breaking your integration.\n\n",
-    "version": "v1"
+    "version": "0.0.2"
   },
   "servers": [
     {
-      "url": "/api"
-    },
-    {
-      "url": "",
-      "description": ""
+      "url": "https://valuecard.co.il/api/"
     }
   ],
   "security": [
@@ -20,1830 +15,31 @@
     }
   ],
   "paths": {
-    "/CustomerSeries/Delete": {
-      "delete": {
-        "tags": [
-          "CustomerSeries"
-        ],
-        "parameters": [
-          {
-            "name": "seriesId",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerSeriesResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerSeriesResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerSeriesResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/CustomizedFields/Get": {
-      "post": {
-        "tags": [
-          "CustomizedFields"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Filter"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Filter"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Filter"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/CustomizedFields/Create": {
-      "post": {
-        "tags": [
-          "CustomizedFields"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/CustomizedFields/Update": {
-      "put": {
-        "tags": [
-          "CustomizedFields"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomizedField"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/CustomizedFields/Delete": {
-      "delete": {
-        "tags": [
-          "CustomizedFields"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomizedFieldResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetCardGroups": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Get locations dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardGroupsDropdownModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardGroupsDropdownModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardGroupsDropdownModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetPromotions": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Get locations dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PromotionResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PromotionResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PromotionResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetBusinessCategories": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BusinessCategoriesResponseDropDown"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BusinessCategoriesResponseDropDown"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BusinessCategoriesResponseDropDown"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetClubMemberClasses": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownClassesResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownClassesResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownClassesResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetLocationDropDown": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocationDropDownResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocationDropDownResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocationDropDownResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetPosTypes": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PosTypesDropDownResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PosTypesDropDownResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PosTypesDropDownResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetChains": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChainDropDownResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChainDropDownResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChainDropDownResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetCities": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownCityResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownCityResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownCityResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetMenuTypes": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuTypeDropDownResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuTypeDropDownResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuTypeDropDownResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetKosherTypes": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownKosherTypeResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownKosherTypeResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownKosherTypeResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetVouchersCompanies": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Create location dropdown filter",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownVouchersCompaniesResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownVouchersCompaniesResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DropDownVouchersCompaniesResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetCardGroupLoadLocationsEdits": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "cardGroupId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupLoadLocationsEdit"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupLoadLocationsEdit"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupLoadLocationsEdit"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/SearchClauses": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SearchClauses"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SearchClauses"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SearchClauses"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/CardGroupPaymentLocations": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "cardGroupId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupPaymentLocations"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupPaymentLocations"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupPaymentLocations"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/CardGroupGeneralLocations": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "cardGroupId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupGeneralLocations"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupGeneralLocations"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CardGroupGeneralLocations"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetExtraFields": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtraFieldsUniversalIdsDropDown"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtraFieldsUniversalIdsDropDown"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtraFieldsUniversalIdsDropDown"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetExtSeries": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtSeriesModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtSeriesModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExtSeriesModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetAudiencePromotions": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Get promotions dropdown",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PromotionModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PromotionModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PromotionModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetAudienceTransactionsLocations": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "summary": "Get locations dropdown",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DropDown/GetDropDownAudienceCardGroups": {
-      "get": {
-        "tags": [
-          "DropDown"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GeneralDropDownModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Location/GetLocations": {
-      "post": {
-        "tags": [
-          "Location"
-        ],
-        "summary": "Get's list of locations with query parameter filters",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LocationFilter"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LocationFilter"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LocationFilter"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Location/AddLocation": {
-      "post": {
-        "tags": [
-          "Location"
-        ],
-        "summary": "API to create new location",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/body"
-              },
-              "encoding": {
-                "StatusId": {
-                  "style": "form"
-                },
-                "Title": {
-                  "style": "form"
-                },
-                "MemberClassId": {
-                  "style": "form"
-                },
-                "ChainId": {
-                  "style": "form"
-                },
-                "BusinessCategoryId": {
-                  "style": "form"
-                },
-                "Address": {
-                  "style": "form"
-                },
-                "CityId": {
-                  "style": "form"
-                },
-                "Region": {
-                  "style": "form"
-                },
-                "Phone": {
-                  "style": "form"
-                },
-                "Email": {
-                  "style": "form"
-                },
-                "SapId": {
-                  "style": "form"
-                },
-                "MobileOpenHours": {
-                  "style": "form"
-                },
-                "RestType": {
-                  "style": "form"
-                },
-                "KosherType": {
-                  "style": "form"
-                },
-                "VoucherCompanyId": {
-                  "style": "form"
-                },
-                "ApiVersion": {
-                  "style": "form"
-                },
-                "MaxDiscountValueForOneBill": {
-                  "style": "form"
-                },
-                "LcnMaxAccumulationPerTran": {
-                  "style": "form"
-                },
-                "MobileGpsLongitude": {
-                  "style": "form"
-                },
-                "MobileGpsLatitude": {
-                  "style": "form"
-                },
-                "LcnMaxBalToDiscountMoney": {
-                  "style": "form"
-                },
-                "LcnMaxBalToDiscountPercent": {
-                  "style": "form"
-                },
-                "LcnMaxDiscount": {
-                  "style": "form"
-                },
-                "MobileShowOnApp": {
-                  "style": "form"
-                },
-                "LinkToImage": {
-                  "style": "form"
-                },
-                "LinkToImageFile": {
-                  "style": "form"
-                },
-                "BranchFacebook": {
-                  "style": "form"
-                },
-                "BranchTripAdvisor": {
-                  "style": "form"
-                },
-                "SpId": {
-                  "style": "form"
-                },
-                "PosType": {
-                  "style": "form"
-                },
-                "BranchDeliveryUrl": {
-                  "style": "form"
-                },
-                "BranchDeliveryPhone": {
-                  "style": "form"
-                },
-                "LinkToBookATable": {
-                  "style": "form"
-                },
-                "BranchNote": {
-                  "style": "form"
-                },
-                "CopyFromLocationId": {
-                  "style": "form"
-                },
-                "DuplicateWithNewPos": {
-                  "style": "form"
-                },
-                "OldPosLocationId": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Location/DeleteLocation": {
-      "delete": {
-        "tags": [
-          "Location"
-        ],
-        "summary": "API to delete location by id",
-        "parameters": [
-          {
-            "name": "branchId",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Location/UpdateLocation": {
-      "put": {
-        "tags": [
-          "Location"
-        ],
-        "summary": "API to update location",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/body_1"
-              },
-              "encoding": {
-                "Id": {
-                  "style": "form"
-                },
-                "StatusId": {
-                  "style": "form"
-                },
-                "Title": {
-                  "style": "form"
-                },
-                "MemberClassId": {
-                  "style": "form"
-                },
-                "ChainId": {
-                  "style": "form"
-                },
-                "BusinessCategoryId": {
-                  "style": "form"
-                },
-                "Address": {
-                  "style": "form"
-                },
-                "CityId": {
-                  "style": "form"
-                },
-                "Phone": {
-                  "style": "form"
-                },
-                "Email": {
-                  "style": "form"
-                },
-                "SapId": {
-                  "style": "form"
-                },
-                "ApiVersion": {
-                  "style": "form"
-                },
-                "MobileOpenHours": {
-                  "style": "form"
-                },
-                "RestType": {
-                  "style": "form"
-                },
-                "KosherType": {
-                  "style": "form"
-                },
-                "LcnMaxAccumulationPerTran": {
-                  "style": "form"
-                },
-                "MobileGpsLongitude": {
-                  "style": "form"
-                },
-                "MobileGpsLatitude": {
-                  "style": "form"
-                },
-                "LcnMaxBalToDiscountMoney": {
-                  "style": "form"
-                },
-                "LcnMaxBalToDiscountPercent": {
-                  "style": "form"
-                },
-                "LcnMaxDiscount": {
-                  "style": "form"
-                },
-                "MobileShowOnApp": {
-                  "style": "form"
-                },
-                "LinkToImage": {
-                  "style": "form"
-                },
-                "LinkToImageFile": {
-                  "style": "form"
-                },
-                "BranchFacebook": {
-                  "style": "form"
-                },
-                "BranchTripAdvisor": {
-                  "style": "form"
-                },
-                "PosType": {
-                  "style": "form"
-                },
-                "BranchDeliveryUrl": {
-                  "style": "form"
-                },
-                "BranchDeliveryPhone": {
-                  "style": "form"
-                },
-                "LinkToBookATable": {
-                  "style": "form"
-                },
-                "BranchNote": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BranchListResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Members/Get": {
-      "post": {
-        "tags": [
-          "Members"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemeberFilters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemeberFilters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemeberFilters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Members/Create": {
-      "post": {
-        "tags": [
-          "Members"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Members/Update": {
-      "put": {
-        "tags": [
-          "Members"
-        ],
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditClubMemberModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClubMemberResponseModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Members/Delete": {
-      "delete": {
-        "tags": [
-          "Members"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Budget/LoadBudgetQuery": {
+    "/pos/transaction/VoidTransaction": {
       "post": {
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
-              },
-              "examples": {
-                "example-1": {}
+                "$ref": "#/components/schemas/VoidTransactionParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
+                "$ref": "#/components/schemas/VoidTransactionParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
+                "$ref": "#/components/schemas/VoidTransactionParameters"
               }
             }
           }
         },
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/VcTransactionResponse"
@@ -1857,49 +53,38 @@
             }
           }
         },
-        "summary": "LoadBudgetQuery",
-        "description": "lorem ipsum akdsd sdfasdf asdf asdf as df asdfasdfasd",
-        "operationId": "",
+        "summary": "Void Transaction",
+        "description": "VoidTransaction DESCRIPTION",
         "tags": [
-          "Budget",
-          "test"
+          "Transaction"
         ]
-      },
-      "parameters": []
+      }
     },
-    "/api/PosBudget/LoadBudgetCommitQuery": {
+    "/pos/benefits/GetBenefitsCommitQuery": {
       "post": {
-        "tags": [
-          "PosBudget"
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             }
           }
         },
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/VcTransactionResponse"
@@ -1912,179 +97,157 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/PosCard/CardInformationEx": {
-      "get": {
+        },
         "tags": [
-          "PosCard"
+          "Benefits"
         ],
-        "parameters": [
-          {
-            "name": "cardNumber",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pin",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "coupon",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Get Benefits Commit Query"
       }
     },
-    "/api/PosClubMember/ClubMemberDetails": {
-      "get": {
-        "tags": [
-          "PosClubMember"
-        ],
-        "parameters": [
-          {
-            "name": "cardNumber",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "memberId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/PosClubMember/RegisterClubMemberEx": {
+    "/pos/club_member/AuthenticateMember": {
       "post": {
-        "tags": [
-          "PosClubMember"
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+                "$ref": "#/components/schemas/AuthenticateMemberParameter"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+                "$ref": "#/components/schemas/AuthenticateMemberParameter"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+                "$ref": "#/components/schemas/AuthenticateMemberParameter"
               }
             }
           }
         },
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
+                  "$ref": "#/components/schemas/AuthenticateMemberResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
+                  "$ref": "#/components/schemas/AuthenticateMemberResponse"
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Members"
+        ],
+        "summary": "Authenticate Member"
       }
     },
-    "/api/PosClubMember/SearchClubMember": {
-      "get": {
+    "/pos/club_member/SendAuthenticationMessage": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              }
+            }
+          }
+        },
         "tags": [
-          "PosClubMember"
+          "Members"
         ],
+        "summary": "Send Authentication Message"
+      }
+    },
+    "/pos/club_member/UpdateClubMember": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Members"
+        ],
+        "summary": "Update Club Member"
+      }
+    },
+    "/pos/club_member/SearchClubMember": {
+      "get": {
         "parameters": [
           {
             "name": "firstName",
@@ -2153,7 +316,7 @@
             }
           },
           {
-            "name": "cardNumber",
+            "name": "clientIdentifier",
             "in": "query",
             "required": false,
             "style": "form",
@@ -2165,8 +328,8 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "successful operation",
             "content": {
               "text/plain": {
                 "schema": {
@@ -2185,161 +348,86 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Members"
+        ],
+        "summary": "Search Club Member"
       }
     },
-    "/api/PosClubMember/UpdateClubMember": {
+    "/pos/club_member/RegisterClubMemberEx": {
       "post": {
-        "tags": [
-          "PosClubMember"
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
               }
             }
           }
         },
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
+                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
+                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/PosClubMember/SendAuthenticationMessage": {
-      "post": {
-        "tags": [
-          "PosClubMember"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendAuthenticationMessageParameter"
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
               }
             }
           }
         },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/PosClubMember/AuthenticateMember": {
-      "post": {
         "tags": [
-          "PosClubMember"
+          "Members"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthenticateMemberParameter"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthenticateMemberParameter"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthenticateMemberParameter"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticateMemberResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticateMemberResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticateMemberResponse"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Club Member Register",
+        "description": "Create a Pos Club Member Register Club Member Ex\n"
       }
     },
-    "/api/PosCore/GenerateToken": {
+    "/pos/club_member/ClubMemberDetails": {
       "get": {
-        "tags": [
-          "PosCore"
-        ],
         "parameters": [
           {
-            "name": "locationId",
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "memberId",
             "in": "query",
             "required": false,
             "style": "form",
@@ -2351,181 +439,38 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/PosLoyaltyBenefits/GetBenefitsQuery": {
-      "post": {
-        "tags": [
-          "PosLoyaltyBenefits"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
               }
             }
           }
         },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/PosLoyaltyBenefits/GetBenefitsCommitQuery": {
-      "post": {
         "tags": [
-          "PosLoyaltyBenefits"
+          "Members"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Club Member Details"
       }
     },
-    "/api/PosTransaction/VoidTransaction": {
-      "post": {
-        "tags": [
-          "PosTransaction"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/login": {
+    "/pos/card/CardInformationEx": {
       "get": {
-        "tags": [
-          "User"
-        ],
         "parameters": [
           {
-            "name": "LoginName",
+            "name": "clientIdentifier",
             "in": "query",
             "required": true,
             "style": "form",
@@ -2535,443 +480,7 @@
             }
           },
           {
-            "name": "LoginPW",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseLoginModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseLoginModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseLoginModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/ForgotPassword": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Forgot password API - sends url address with token to user email address",
-        "parameters": [
-          {
-            "name": "LoginName",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/VerifyToken": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Verification token from email",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenObj"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenObj"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenObj"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/ResetUserPassword": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Verification token from email",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePasswordModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePasswordModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePasswordModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/GetAllUserSettings": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "GetAllUserSettings",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/UpdateUserSettings": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "UpdateUserSettings",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInfoModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInfoModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInfoModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/LoadUserLogo": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "LoadUserLogo",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/body_2"
-              },
-              "encoding": {
-                "ContentType": {
-                  "style": "form"
-                },
-                "ContentDisposition": {
-                  "style": "form"
-                },
-                "Headers": {
-                  "style": "form"
-                },
-                "Length": {
-                  "style": "form"
-                },
-                "Name": {
-                  "style": "form"
-                },
-                "FileName": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/UpdateUserPassword": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "UpdateUserPassword",
-        "parameters": [
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseStatusModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/User/GetExportQueue": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "pageName",
+            "name": "pin",
             "in": "query",
             "required": false,
             "style": "form",
@@ -2980,46 +489,161 @@
               "type": "string",
               "nullable": true
             }
-          },
-          {
-            "name": "dbSessionId",
-            "in": "header",
-            "required": false,
-            "style": "simple",
-            "explode": false
           }
         ],
         "responses": {
-          "default": {
-            "description": "Error",
+          "200": {
+            "description": "",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoadedQueues"
-                  }
-                }
-              },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoadedQueues"
-                  }
+                  "$ref": "#/components/schemas/CardInformationExResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoadedQueues"
-                  }
+                  "$ref": "#/components/schemas/CardInformationExResponse"
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Card"
+        ],
+        "summary": "Card Information Ex"
+      }
+    },
+    "/pos/budget/LoadBudgetCommitQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Budget"
+        ],
+        "summary": "Load Budget Commit Query"
+      }
+    },
+    "/pos/budget/LoadBudgetQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Budget"
+        ],
+        "summary": "Load Budget Query"
+      }
+    },
+    "/pos/benefits/GetBenefitsQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Benefits"
+        ],
+        "summary": "Get Benefits Query"
       }
     }
   },
@@ -4933,10 +2557,6 @@
       "LoadBudgetParameters": {
         "type": "object",
         "properties": {
-          "cardNumber": {
-            "type": "string",
-            "nullable": true
-          },
           "pin": {
             "type": "string",
             "nullable": true
@@ -4947,6 +2567,10 @@
           },
           "payMethod": {
             "$ref": "#/components/schemas/PayMethod"
+          },
+          "clientIdentifier": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -4980,7 +2604,9 @@
             "type": "string",
             "nullable": true
           }
-        }
+        },
+        "title": "Common",
+        "description": ""
       },
       "VcTransactionResponse": {
         "type": "object",
@@ -4990,7 +2616,8 @@
           },
           "transactionId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "Transaction Id"
           },
           "memberFullName": {
             "type": "string",
@@ -5064,14 +2691,6 @@
             "type": "string",
             "nullable": true
           },
-          "displayUpsale": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "upsaleMessage": {
-            "type": "string",
-            "nullable": true
-          },
           "givenPromoIDs": {
             "type": "string",
             "nullable": true
@@ -5132,45 +2751,22 @@
             "type": "string",
             "nullable": true
           },
-          "returnCode": {
+          "upSaleMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayUpSale": {
             "type": "integer",
             "format": "int32"
-          },
-          "httpCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isError": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "printMessage": {
-            "type": "string",
-            "nullable": true
-          },
-          "exception": {
-            "type": "string",
-            "nullable": true
           }
         }
       },
       "LoadBudgetCommitQueryParameters": {
         "type": "object",
         "properties": {
-          "cardNumber": {
-            "type": "string",
-            "nullable": true
-          },
           "pin": {
             "type": "string",
             "nullable": true
-          },
-          "loadSum": {
-            "type": "number",
-            "format": "double"
           },
           "payMethod": {
             "$ref": "#/components/schemas/PayMethod"
@@ -5178,6 +2774,10 @@
           "queryTransactionId": {
             "type": "integer",
             "format": "int32"
+          },
+          "clientIdentifier": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -5376,14 +2976,6 @@
       "RegisterClubMemberParameters": {
         "type": "object",
         "properties": {
-          "requestId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "cardNumber": {
-            "type": "string",
-            "nullable": true
-          },
           "firstName": {
             "type": "string",
             "nullable": true
@@ -5391,9 +2983,6 @@
           "lastName": {
             "type": "string",
             "nullable": true
-          },
-          "isMale": {
-            "type": "boolean"
           },
           "birthDate": {
             "type": "string",
@@ -5428,6 +3017,14 @@
           "comments": {
             "type": "string",
             "nullable": true
+          },
+          "gender": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientIdentifier": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -5450,10 +3047,6 @@
       "ClubMemberUpdateParameters": {
         "type": "object",
         "properties": {
-          "terminalId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "idNum": {
             "type": "string",
             "nullable": true
@@ -5550,32 +3143,28 @@
             "format": "int64"
           },
           "amount": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "itemPrice": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "total": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "businessCode": {
             "type": "integer",
             "format": "int64"
           },
-          "barcode": {
-            "type": "string",
-            "nullable": true
-          },
           "originalPrice": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "discount": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "promotionCode": {
             "type": "string",
@@ -5731,14 +3320,6 @@
             "type": "string",
             "nullable": true
           },
-          "displayUpsale": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "upsaleMessage": {
-            "type": "string",
-            "nullable": true
-          },
           "givenPromoIDs": {
             "type": "string",
             "nullable": true
@@ -5762,30 +3343,16 @@
           "common": {
             "$ref": "#/components/schemas/VcBaseResponse"
           },
-          "returnCode": {
+          "upSaleMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayUpSale": {
             "type": "integer",
             "format": "int32"
-          },
-          "httpCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isError": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "printMessage": {
-            "type": "string",
-            "nullable": true
-          },
-          "exception": {
-            "type": "string",
-            "nullable": true
           }
-        }
+        },
+        "title": ""
       },
       "TransItemCommit": {
         "type": "object",
@@ -5799,32 +3366,28 @@
             "format": "int64"
           },
           "amount": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "itemPrice": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "total": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "businessCode": {
             "type": "integer",
             "format": "int64"
           },
-          "barcode": {
-            "type": "string",
-            "nullable": true
-          },
           "originalPrice": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "discount": {
-            "type": "string",
-            "nullable": true
+            "type": "number",
+            "format": "double"
           },
           "promotionCode": {
             "type": "string",
@@ -6485,6 +4048,207 @@
             "nullable": true
           }
         }
+      },
+      "CustomerEmailsResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "$ref": "#/components/schemas/ResponseStatusModel"
+          },
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CustomerEmailsReadModel"
+            }
+          }
+        }
+      },
+      "CustomerEmailsReadModel": {
+        "type": "object",
+        "properties": {
+          "emailId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "greeting": {
+            "type": "string",
+            "nullable": true
+          },
+          "isUrlMessage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "searchClauseId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schIsEnabled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schNextExecDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "schExecCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schStart": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schEnd": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schTimeFrameStart": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schTimeFrameEnd": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schInterval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schIntervalType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schStartDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "schEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "schTimeFrameStartHr": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "schTimeFrameEndHr": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "reportSystemSource": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "reportSystemNewReportId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "unsubscribeLink": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "openUrlLink": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "imageRender": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "trackingPixel": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lastExecDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "messageTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "builderHtml": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CustomerEmailsFilter": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "$ref": "#/components/schemas/Filter"
+          },
+          "emailId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CustomizedFieldsDropDown": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "universalId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -6495,5 +4259,22 @@
         "in": "header"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Budget"
+    },
+    {
+      "name": "Card"
+    },
+    {
+      "name": "Members"
+    },
+    {
+      "name": "Benefits"
+    },
+    {
+      "name": "Transaction"
+    }
+  ]
 }
