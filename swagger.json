@@ -159,7 +159,7 @@
         ]
       }
     },
-        "/pos/club_member/RegisterClubMemberEx": {
+    "/pos/club_member/RegisterClubMemberEx": {
       "post": {
         "requestBody": {
           "content": {
@@ -217,171 +217,7 @@
         "operationId": "205"
       }
     },
-    "/pos/club_member/UpdateClubMember": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Update Club Member",
-        "tags": [
-          "Member/User"
-        ]
-      }
-    },
-
-
-    "/pos/club_member/ClubMemberDetails": {
-      "get": {
-        "parameters": [
-          {
-            "name": "clientIdentifier",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "memberId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Club Member Details",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "tags": [
-          "Member/User"
-        ]
-      }
-    },
-    "/pos/card/CardInformationEx": {
-      "get": {
-        "parameters": [
-          {
-            "name": "clientIdentifier",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pin",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Card Information Ex",
-        "description": "View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
-        "tags": [
-          "Member/User"
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-        "/pos/club_member/SearchClubMember": {
+    "/pos/club_member/SearchClubMember": {
       "get": {
         "parameters": [
           {
@@ -493,6 +329,168 @@
         "summary": "Member and Card Search",
         "description": "This operation is run by the POS operator to search for a club member/card. By default, the search is done by swiping the card. It can also be done by manually entering the client's name, card number, email, ID number, or phone number.\n\nThe search will return the client’s name, card number, cellphone number, email, birthday, expiration date, and more.\n\nOnce you have searched for and found a card, you can perform the following actions:\n - Associate the card to the current transaction by calling the AssociateCardToTransaction operation using the unique CardNumber identifier returned in the search.\n \n - View the benefits on the card by calling the \n[CardInformationEx](#tag/Card/paths/~1pos~1card~1CardInformationEx/get) operation using the unique CardNumber identifier returned in the search.\n \n - View the club member/card details by calling the [ClubMemberDetails](#tag/Members/paths/~1pos~1club_member~1ClubMemberDetails/get)  operation using the unique MemberID identifier returned in the search.\n\n - Edit club member/card details by calling the [UpdateClubMember](#tag/Members/paths/~1pos~1club_member~1UpdateClubMember/post) operation using the unique MemberID identifier returned in the search\n\n - Transfer club member to a new card by calling the TransferCardActivity operation using the unique CardID identifier returned in the search.\n \n - View recent activity by calling the ViewRecentActivity operation using the unique CardID identifier returned in the search.\n",
         "operationId": "",
+        "tags": [
+          "Member/User"
+        ]
+      }
+    },
+    "/pos/card/CardInformationEx": {
+      "get": {
+        "parameters": [
+          {
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pin",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardInformationExResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardInformationExResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Card Information Ex",
+        "description": "View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
+        "tags": [
+          "Member/User"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pos/club_member/UpdateClubMember": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update Club Member",
+        "tags": [
+          "Member/User"
+        ]
+      }
+    },
+    "/pos/club_member/ClubMemberDetails": {
+      "get": {
+        "parameters": [
+          {
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Club Member Details",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "tags": [
           "Member/User"
         ]
