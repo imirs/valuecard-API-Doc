@@ -21,6 +21,51 @@
     }
   ],
   "paths": {
+    "/pos/transaction/VoidTransaction": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Cancellation of the Entire Transaction",
+        "description": "This operation is triggered when the POS operator wants to completely void an entire transaction, usually after the transaction has been closed. It can also void a transaction before it has been closed if the client decides not to go through with the transaction. It cannot be used to cancel only certain items within the transaction.\n\nOnce a card has been associated with a transaction this operation must be run in order to void the transaction.\n\nThe POS operator initiates a full refund to a transaction. The POS software identifies that Valuecard is associated with the transaction and calls VoidTransaction.\n",
+        "tags": [
+          "Voiding"
+        ]
+      }
+    },
     "/pos/club_member/AuthenticateMember": {
       "post": {
         "requestBody": {
@@ -111,6 +156,215 @@
         "summary": "Send Authentication Message",
         "tags": [
           "Members Authenticate"
+        ]
+      }
+    },
+    "/pos/club_member/UpdateClubMember": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcBaseResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update Club Member",
+        "tags": [
+          "Member/User"
+        ]
+      }
+    },
+    "/pos/club_member/ClubMemberDetails": {
+      "get": {
+        "parameters": [
+          {
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Club Member Details",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Member/User"
+        ]
+      }
+    },
+    "/pos/budget/LoadBudgetQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Budget"
+        ],
+        "summary": "Load Budget Query",
+        "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pos/benefits/GetBenefitsQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get Benefits Query",
+        "description": "This operation requests benefits from Valuecard’s server and applies them in the form of a discount to the transaction or simply recording the transaction on Valuecard's servers for points accumulation or just for analysis. It is triggered for every transaction that has a Valuecard associated with it when the POS operator initiates the Payment.\n\nWhen a POS operator associates a Valuecard with a transaction and clicks “Pay”, the existing benefits from [View Benefits Details] operation are displayed along with a field for applying points or a coupon. If this is second time the POS operator applied points or coupon in this transaction, they will be remembered and displayed in this field.\n\nAfter applying any relevant points or coupon number and clicking “Continue”, the Get Benefits Query is started. The Get Benefits Query operation retrieves the current transaction data and calculates the final outcome which can translate into bottom line discount and/or items discount. \n\nIf the output parameter [Discount] is greater than 0, that amount will be credited to the account and tagged as a Valuecard benefit. If items discounts string is returned to POS that each item on the bill should be discounted accordingly along with the description of what was the discount for. If Valuecard is linked, once reached the payment stage, the Get Benefits Query is run again and the benefits are recalculated. Prior to re-running the operation the existing Valuecard discount are deleted.\n\nIn addition, the content  of the response parameter [PrintMessage] will be displayed on screen thus the cashier will be able to view and comprehend the results.\n\nIt is not possible to use more than one Valuecard in a transaction unless the checkout mechanism allows splitting a transaction into several parts and relating to each one separately.\n\nIf the POS operator deletes the Valuecard benefit line (the discount) the following will occur:\n - Valuecard discount will be canceled.\n - Valuecard will no longer be associated with the transaction.\n - The VoidTransaction operation will be called.",
+        "tags": [
+          "Benefits and Rewards"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -332,7 +586,7 @@
           }
         },
         "summary": "Card Information Ex",
-        "description": "View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
+        "description": "\n**View Benefits Details**\n\nThis operation may be used in two different scenatios:\n\n 1. To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation.\n 2.  To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards\n\nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \n\nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\n\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\n\nIf the operation fails an error [Message] will be displayed.\n",
         "tags": [
           "Member/User"
         ],
@@ -340,134 +594,27 @@
           {
             "Bearer": []
           }
-        ]
+        ],
+        "operationId": "5302"
       }
     },
-    "/pos/club_member/UpdateClubMember": {
+    "/pos/benefits/GetBenefitsCommitQuery": {
       "post": {
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ClubMemberUpdateParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcBaseResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Update Club Member",
-        "tags": [
-          "Member/User"
-        ]
-      }
-    },
-    "/pos/club_member/ClubMemberDetails": {
-      "get": {
-        "parameters": [
-          {
-            "name": "clientIdentifier",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "memberId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Club Member Details",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "tags": [
-          "Member/User"
-        ]
-      }
-    },
-    "/pos/budget/LoadBudgetQuery": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetParameters"
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
               }
             }
           }
@@ -490,18 +637,13 @@
           }
         },
         "tags": [
-          "Budget"
+          "Benefits and Rewards"
         ],
-        "summary": "Load Budget Query",
-        "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
+        "summary": "Get Benefits Commit Query",
+        "description": "Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\n\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\n\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\n\nIf payment did not go through, a request to cancel the entire transaction will be sent.\n\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
       }
     },
-        "/pos/budget/LoadBudgetCommitQuery": {
+    "/pos/budget/LoadBudgetCommitQuery": {
       "post": {
         "requestBody": {
           "content": {
@@ -549,147 +691,6 @@
             "Bearer": []
           }
         ]
-      }
-    },
-    "/pos/transaction/VoidTransaction": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Cancellation of the Entire Transaction",
-        "description": "This operation is triggered when the POS operator wants to completely void an entire transaction, usually after the transaction has been closed. It can also void a transaction before it has been closed if the client decides not to go through with the transaction. It cannot be used to cancel only certain items within the transaction.\n\nOnce a card has been associated with a transaction this operation must be run in order to void the transaction.\n\nThe POS operator initiates a full refund to a transaction. The POS software identifies that Valuecard is associated with the transaction and calls VoidTransaction.\n",
-        "tags": [
-          "Voiding"
-        ]
-      }
-    },
-    "/pos/benefits/GetBenefitsQuery": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsJsonParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcGetBenefitQueryResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Get Benefits Query",
-        "description": "This operation requests benefits from Valuecard’s server and applies them in the form of a discount to the transaction or simply recording the transaction on Valuecard's servers for points accumulation or just for analysis. It is triggered for every transaction that has a Valuecard associated with it when the POS operator initiates the Payment.\nWhen a POS operator associates a Valuecard with a transaction and clicks “Pay”, the existing benefits from [View Benefits Details] operation are displayed along with a field for applying points or a coupon. If this is second time the POS operator applied points or coupon in this transaction, they will be remembered and displayed in this field.\nAfter applying any relevant points or coupon number and clicking “Continue”, the Get Benefits Query is started. The Get Benefits Query operation retrieves the current transaction data and calculates the final outcome which can translate into bottom line discount and/or items discount. \n\nIf the output parameter [Discount] is greater than 0, that amount will be credited to the account and tagged as a Valuecard benefit. If items discounts string is returned to POS that each item on the bill should be discounted accordingly along with the description of what was the discount for. If Valuecard is linked, once reached the payment stage, the Get Benefits Query is run again and the benefits are recalculated. Prior to re-running the operation the existing Valuecard discount are deleted.\n\nIn addition, the content  of the response parameter [PrintMessage] will be displayed on screen thus the cashier will be able to view and comprehend the results.\n\nIt is not possible to use more than one Valuecard in a transaction unless the checkout mechanism allows splitting a transaction into several parts and relating to each one separately.\n\nIf the POS operator deletes the Valuecard benefit line (the discount) the following will occur:\n⦁\tValuecard discount will be canceled.\n⦁\tValuecard will no longer be associated with the transaction.\n⦁\tThe VoidTransaction operation will be called.",
-        "tags": [
-          "Benefits and Rewards"
-        ],
-        "parameters": [],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/pos/benefits/GetBenefitsCommitQuery": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Benefits and Rewards"
-        ],
-        "summary": "Get Benefits Commit Query",
-        "description": "Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\n\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\n\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\n\nIf payment did not go through, a request to cancel the entire transaction will be sent.\n\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
       }
     }
   },
