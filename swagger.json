@@ -153,7 +153,8 @@
           "Members"
         ],
         "summary": "Self-Service kiosk - member authentication",
-        "description": "This endpoint is userd for authenticating a member in a Self service kiost or websites"
+        "description": "This endpoint is userd for authenticating a member in a Self service kiost or websites",
+        "operationId": ""
       }
     },
     "/pos/club_member/SendAuthenticationMessage": {
