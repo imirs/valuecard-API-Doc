@@ -1198,6 +1198,14 @@
           }
         }
       },
+      "AuthenticateMemberResponse": {
+        "type": "object",
+        "properties": {
+          "common": {
+            "$ref": "#/components/schemas/VcBaseResponse"
+          }
+        }
+      },
       "GetBenefitsJsonParameters": {
         "required": [
           "clientIdentifier",
