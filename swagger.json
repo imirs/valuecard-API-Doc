@@ -63,7 +63,7 @@
           "Benefits and Rewards"
         ],
         "summary": "Get Benefits Commit Query",
-        "description": "##Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\nIf payment did not go through, a request to cancel the entire transaction will be sent.\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
+        "description": "Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\n\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\n\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\n\nIf payment did not go through, a request to cancel the entire transaction will be sent.\n\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
       }
     },
     "/pos/club_member/AuthenticateMember": {
@@ -105,7 +105,7 @@
           }
         },
         "tags": [
-          "Members Authenticate "
+          "Members Authenticate"
         ],
         "summary": "Authenticate Member"
       }
@@ -155,7 +155,7 @@
         },
         "summary": "Send Authentication Message",
         "tags": [
-          "Members Authenticate "
+          "Members Authenticate"
         ]
       }
     },
@@ -596,7 +596,7 @@
         ]
       }
     },
-        "/pos/transaction/VoidTransaction": {
+    "/pos/transaction/VoidTransaction": {
       "post": {
         "requestBody": {
           "content": {
@@ -680,7 +680,7 @@
           }
         },
         "summary": "Get Benefits Query",
-        "description": "This operation requests benefits from Valuecard’s server and applies them in the form of a discount to the transaction or simply recording the transaction on Valuecard's servers for points accumulation or just for analysis. It is triggered for every transaction that has a Valuecard associated with it when the POS operator initiates the Payment.\nWhen a POS operator associates a Valuecard with a transaction and clicks “Pay”, the existing benefits from [View Benefits Details] operation are displayed along with a field for applying points or a coupon. If this is second time the POS operator applied points or coupon in this transaction, they will be remembered and displayed in this field.\nAfter applying any relevant points or coupon number and clicking “Continue”, the Get Benefits Query is started. The Get Benefits Query operation retrieves the current transaction data and calculates the final outcome which can translate into bottom line discount and/or items discount. \nIf the output parameter [Discount] is greater than 0, that amount will be credited to the account and tagged as a Valuecard benefit. If items discounts string is returned to POS that each item on the bill should be discounted accordingly along with the description of what was the discount for. If Valuecard is linked, once reached the payment stage, the Get Benefits Query is run again and the benefits are recalculated. Prior to re-running the operation the existing Valuecard discount are deleted.\nIn addition, the content  of the response parameter [PrintMessage] will be displayed on screen thus the cashier will be able to view and comprehend the results.\nIt is not possible to use more than one Valuecard in a transaction unless the checkout mechanism allows splitting a transaction into several parts and relating to each one separately.\nIf the POS operator deletes the Valuecard benefit line (the discount) the following will occur:\n⦁\tValuecard discount will be canceled.\n⦁\tValuecard will no longer be associated with the transaction.\n⦁\tThe VoidTransaction operation will be called.",
+        "description": "This operation requests benefits from Valuecard’s server and applies them in the form of a discount to the transaction or simply recording the transaction on Valuecard's servers for points accumulation or just for analysis. It is triggered for every transaction that has a Valuecard associated with it when the POS operator initiates the Payment.\nWhen a POS operator associates a Valuecard with a transaction and clicks “Pay”, the existing benefits from [View Benefits Details] operation are displayed along with a field for applying points or a coupon. If this is second time the POS operator applied points or coupon in this transaction, they will be remembered and displayed in this field.\nAfter applying any relevant points or coupon number and clicking “Continue”, the Get Benefits Query is started. The Get Benefits Query operation retrieves the current transaction data and calculates the final outcome which can translate into bottom line discount and/or items discount. \n\nIf the output parameter [Discount] is greater than 0, that amount will be credited to the account and tagged as a Valuecard benefit. If items discounts string is returned to POS that each item on the bill should be discounted accordingly along with the description of what was the discount for. If Valuecard is linked, once reached the payment stage, the Get Benefits Query is run again and the benefits are recalculated. Prior to re-running the operation the existing Valuecard discount are deleted.\n\nIn addition, the content  of the response parameter [PrintMessage] will be displayed on screen thus the cashier will be able to view and comprehend the results.\n\nIt is not possible to use more than one Valuecard in a transaction unless the checkout mechanism allows splitting a transaction into several parts and relating to each one separately.\n\nIf the POS operator deletes the Valuecard benefit line (the discount) the following will occur:\n⦁\tValuecard discount will be canceled.\n⦁\tValuecard will no longer be associated with the transaction.\n⦁\tThe VoidTransaction operation will be called.",
         "tags": [
           "Benefits and Rewards"
         ],
@@ -1648,7 +1648,7 @@
       }
     }
   },
- "tags": [
+  "tags": [
     {
       "name": "Members Authenticate"
     },
@@ -1665,5 +1665,4 @@
       "name": "Voiding"
     }
   ]
- 
 }
