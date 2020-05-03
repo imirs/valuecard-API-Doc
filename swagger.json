@@ -476,14 +476,14 @@
             }
           }
         },
-        "tags": [
-          "Members"
-        ],
         "summary": "Club Member Details",
         "security": [
           {
             "Bearer": []
           }
+        ],
+        "tags": [
+          "Member/User"
         ]
       }
     },
