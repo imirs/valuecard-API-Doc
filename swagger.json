@@ -1438,6 +1438,63 @@
           }
         }
       },
+      "ClubMemberUpdateParameters": {
+        "type": "object",
+        "properties": {
+          "idNum": {
+            "type": "string",
+            "nullable": true
+          },
+          "extGender": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthDay": {
+            "type": "string",
+            "nullable": true
+          },
+          "cellPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "anniversaryDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CardInformationExResponse": {
         "type": "object",
         "properties": {
@@ -1532,7 +1589,8 @@
             "type": "string",
             "nullable": true
           }
-        }
+        },
+        "title": ""
       }
     }
   },
