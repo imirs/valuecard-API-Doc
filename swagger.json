@@ -21,51 +21,6 @@
     }
   ],
   "paths": {
-    "/pos/transaction/VoidTransaction": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/VoidTransactionParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Cancellation of the Entire Transaction",
-        "description": "This operation is triggered when the POS operator wants to completely void an entire transaction, usually after the transaction has been closed. It can also void a transaction before it has been closed if the client decides not to go through with the transaction. It cannot be used to cancel only certain items within the transaction.\n\nOnce a card has been associated with a transaction this operation must be run in order to void the transaction.\n\nThe POS operator initiates a full refund to a transaction. The POS software identifies that Valuecard is associated with the transaction and calls VoidTransaction.\n",
-        "tags": [
-          "Voiding"
-        ]
-      }
-    },
     "/pos/benefits/GetBenefitsCommitQuery": {
       "post": {
         "requestBody": {
@@ -638,6 +593,51 @@
           {
             "Bearer": []
           }
+        ]
+      }
+    },
+        "/pos/transaction/VoidTransaction": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidTransactionParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Cancellation of the Entire Transaction",
+        "description": "This operation is triggered when the POS operator wants to completely void an entire transaction, usually after the transaction has been closed. It can also void a transaction before it has been closed if the client decides not to go through with the transaction. It cannot be used to cancel only certain items within the transaction.\n\nOnce a card has been associated with a transaction this operation must be run in order to void the transaction.\n\nThe POS operator initiates a full refund to a transaction. The POS software identifies that Valuecard is associated with the transaction and calls VoidTransaction.\n",
+        "tags": [
+          "Voiding"
         ]
       }
     },
@@ -1647,5 +1647,23 @@
         "in": "header"
       }
     }
-  }
+  },
+ "tags": [
+    {
+      "name": "Members Authenticate"
+    },
+    {
+      "name": "Member/User"
+    },
+    {
+      "name": "Benefits and Rewards"
+    },
+    {
+      "name": "Budget"
+    },
+    {
+      "name": "Voiding"
+    }
+  ]
+ 
 }
