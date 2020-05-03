@@ -107,7 +107,8 @@
         "tags": [
           "Members Authenticate"
         ],
-        "summary": "Authenticate Member"
+        "summary": "Self-Service kiosk - member authentication",
+        "description": "This endpoint is userd for authenticating a member in a Self service kiost or websites"
       }
     },
     "/pos/club_member/SendAuthenticationMessage": {
@@ -153,10 +154,11 @@
             }
           }
         },
-        "summary": "Send Authentication Message",
+        "summary": "Authentication Message",
         "tags": [
           "Members Authenticate"
-        ]
+        ],
+        "description": "This endpoint is userd to send an sms message to the cellphone entered with an authentication code"
       }
     },
     "/pos/club_member/UpdateClubMember": {
