@@ -1648,9 +1648,6 @@
   },
   "tags": [
     {
-      "name": "Members Authenticate"
-    },
-    {
       "name": "Member/User"
     },
     {
@@ -1661,6 +1658,9 @@
     },
     {
       "name": "Voiding"
+    },
+    {
+      "name": "Members Authenticate"
     }
   ]
 }
