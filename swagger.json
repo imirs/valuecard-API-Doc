@@ -1239,6 +1239,102 @@
           }
         }
       },
+      "CardInformationExResponse": {
+        "type": "object",
+        "properties": {
+          "common": {
+            "$ref": "#/components/schemas/VcBaseResponse"
+          },
+          "transactionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "prepaidBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "locationFooter": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberCellPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "cardUnitsDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberCardNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "upsaleMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayUpsale": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "availableBenefits": {
+            "type": "string",
+            "nullable": true
+          },
+          "insertNewItemsArray": {
+            "type": "string",
+            "nullable": true
+          },
+          "cellphone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "cardGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statusText": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "anniversaryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "balanceDisplay": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "VcGetBenefitQueryResponse": {
         "type": "object",
         "properties": {
