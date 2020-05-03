@@ -479,7 +479,12 @@
         "tags": [
           "Members"
         ],
-        "summary": "Club Member Details"
+        "summary": "Club Member Details",
+        "security": [
+          {
+            "Barerr": []
+          }
+        ]
       }
     },
     "/pos/card/CardInformationEx": {
@@ -528,6 +533,11 @@
         "description": "##View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
         "tags": [
           "Member/User"
+        ],
+        "security": [
+          {
+            "Barerr": []
+          }
         ]
       }
     },
@@ -573,7 +583,12 @@
           "Budget"
         ],
         "summary": "Commit Loading Budget",
-        "description": "After payment is confirmed from the LoadBudget Query, the POS will call the LoadBudgetCommitQuery and upon receiving a positive response, the amount paid will be recorded as a receipt only and will not issue an invoice."
+        "description": "After payment is confirmed from the LoadBudget Query, the POS will call the LoadBudgetCommitQuery and upon receiving a positive response, the amount paid will be recorded as a receipt only and will not issue an invoice.",
+        "security": [
+          {
+            "Barerr": []
+          }
+        ]
       }
     },
     "/pos/budget/LoadBudgetQuery": {
@@ -618,7 +633,12 @@
           "Budget"
         ],
         "summary": "Load Budget Query",
-        "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called."
+        "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called.",
+        "security": [
+          {
+            "Barerr": []
+          }
+        ]
       }
     },
     "/pos/benefits/GetBenefitsQuery": {
@@ -663,6 +683,12 @@
         "description": "This operation requests benefits from Valuecard’s server and applies them in the form of a discount to the transaction or simply recording the transaction on Valuecard's servers for points accumulation or just for analysis. It is triggered for every transaction that has a Valuecard associated with it when the POS operator initiates the Payment.\nWhen a POS operator associates a Valuecard with a transaction and clicks “Pay”, the existing benefits from [View Benefits Details] operation are displayed along with a field for applying points or a coupon. If this is second time the POS operator applied points or coupon in this transaction, they will be remembered and displayed in this field.\nAfter applying any relevant points or coupon number and clicking “Continue”, the Get Benefits Query is started. The Get Benefits Query operation retrieves the current transaction data and calculates the final outcome which can translate into bottom line discount and/or items discount. \nIf the output parameter [Discount] is greater than 0, that amount will be credited to the account and tagged as a Valuecard benefit. If items discounts string is returned to POS that each item on the bill should be discounted accordingly along with the description of what was the discount for. If Valuecard is linked, once reached the payment stage, the Get Benefits Query is run again and the benefits are recalculated. Prior to re-running the operation the existing Valuecard discount are deleted.\nIn addition, the content  of the response parameter [PrintMessage] will be displayed on screen thus the cashier will be able to view and comprehend the results.\nIt is not possible to use more than one Valuecard in a transaction unless the checkout mechanism allows splitting a transaction into several parts and relating to each one separately.\nIf the POS operator deletes the Valuecard benefit line (the discount) the following will occur:\n⦁\tValuecard discount will be canceled.\n⦁\tValuecard will no longer be associated with the transaction.\n⦁\tThe VoidTransaction operation will be called.",
         "tags": [
           "Benefits and Rewards"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "Barerr": []
+          }
         ]
       }
     }
