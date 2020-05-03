@@ -108,7 +108,7 @@
           "Members Authenticate"
         ],
         "summary": "Self-Service Member Authentication",
-        "description": "This endpoint is userd for authenticating a member in a Self service kiost or websites"
+        "description": "This endpoint is used for authenticating a member in a Self service kiosk or websites."
       }
     },
     "/pos/club_member/SendAuthenticationMessage": {
