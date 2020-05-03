@@ -266,7 +266,122 @@
         ]
       }
     },
-    "/pos/club_member/SearchClubMember": {
+
+
+    "/pos/club_member/ClubMemberDetails": {
+      "get": {
+        "parameters": [
+          {
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Club Member Details",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Member/User"
+        ]
+      }
+    },
+    "/pos/card/CardInformationEx": {
+      "get": {
+        "parameters": [
+          {
+            "name": "clientIdentifier",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pin",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardInformationExResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardInformationExResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Card Information Ex",
+        "description": "View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
+        "tags": [
+          "Member/User"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+        "/pos/club_member/SearchClubMember": {
       "get": {
         "parameters": [
           {
@@ -380,120 +495,6 @@
         "operationId": "",
         "tags": [
           "Member/User"
-        ]
-      }
-    },
-
-    "/pos/club_member/ClubMemberDetails": {
-      "get": {
-        "parameters": [
-          {
-            "name": "clientIdentifier",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "memberId",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Club Member Details",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "tags": [
-          "Member/User"
-        ]
-      }
-    },
-    "/pos/card/CardInformationEx": {
-      "get": {
-        "parameters": [
-          {
-            "name": "clientIdentifier",
-            "in": "query",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pin",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CardInformationExResponse"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Card Information Ex",
-        "description": "View Benefits Details\n\nThis operation may be used in two different scenatios:\n1.To view the benefits details of the Card/Voucher/Member/App the POS operator after a search operation\n2.To associate the Card/Voucher/Member/App to an open transaction on POS so it can materialize its benefits and rewards \nin a later operation withou the need to retype or reswipe the client identifier number.\n\nIf the operation is successful, the card details are displayed on the screen. These details include the name, transaction ID, points, benefits, expiration date, last transaction details, and more. \nThe POS should display vividly a sign that Valuecard is linked along with the clubmember’s name if exists.\nIf the parameter [DisplayUpsale] = 1, a popup window showing the content of the output parameter [UpsaleMessage] is also displayed.\nFrom here the POS operator can continue to Get Benefits Query or close the screen without further action.\nIf the operation fails an error [Message] will be displayed.\n",
-        "tags": [
-          "Member/User"
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
         ]
       }
     },
