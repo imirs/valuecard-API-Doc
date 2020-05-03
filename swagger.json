@@ -105,7 +105,7 @@
           }
         },
         "tags": [
-          "Members Authenticate"
+          "Self-Service Member Authentication"
         ],
         "summary": "Self-Service Member Authentication",
         "description": "This endpoint is used for authenticating a member in a Self service kiosk or websites."
@@ -156,7 +156,7 @@
         },
         "summary": "Authentication Message",
         "tags": [
-          "Members Authenticate"
+          "Self-Service Member Authentication"
         ],
         "description": "This endpoint is userd to send an sms message to the cellphone entered with an authentication code"
       }
@@ -1660,7 +1660,7 @@
       "name": "Voiding"
     },
     {
-      "name": "Members Authenticate"
+      "name": "Self-Service Member Authentication"
     }
   ]
 }
