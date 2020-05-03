@@ -21,51 +21,6 @@
     }
   ],
   "paths": {
-    "/pos/benefits/GetBenefitsCommitQuery": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Benefits and Rewards"
-        ],
-        "summary": "Get Benefits Commit Query",
-        "description": "Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\n\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\n\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\n\nIf payment did not go through, a request to cancel the entire transaction will be sent.\n\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
-      }
-    },
     "/pos/club_member/AuthenticateMember": {
       "post": {
         "requestBody": {
@@ -496,56 +451,6 @@
         ]
       }
     },
-    "/pos/budget/LoadBudgetCommitQuery": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VcTransactionResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Budget"
-        ],
-        "summary": "Commit Loading Budget",
-        "description": "After payment is confirmed from the LoadBudget Query, the POS will call the LoadBudgetCommitQuery and upon receiving a positive response, the amount paid will be recorded as a receipt only and will not issue an invoice.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
     "/pos/budget/LoadBudgetQuery": {
       "post": {
         "requestBody": {
@@ -589,6 +494,56 @@
         ],
         "summary": "Load Budget Query",
         "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+        "/pos/budget/LoadBudgetCommitQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadBudgetCommitQueryParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Budget"
+        ],
+        "summary": "Commit Loading Budget",
+        "description": "After payment is confirmed from the LoadBudget Query, the POS will call the LoadBudgetCommitQuery and upon receiving a positive response, the amount paid will be recorded as a receipt only and will not issue an invoice.",
         "security": [
           {
             "Bearer": []
@@ -690,6 +645,51 @@
             "Bearer": []
           }
         ]
+      }
+    },
+    "/pos/benefits/GetBenefitsCommitQuery": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetBenefitsCommitQueryParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Benefits and Rewards"
+        ],
+        "summary": "Get Benefits Commit Query",
+        "description": "Closing the Transaction\n\nThis operation is triggered by the POS upon closing the transaction. It must be synchronized with the results of the last Get Benefits Query via the [TransactionID].\n\nEvery time a Get Benefits Query is run the results are sent to the POS along with a [TransactionID]. The results stay there until the POS operator chooses to close the transaction. When closing the transaction, the POS passes the [TransactionID] in the [QueryTransactionID] parameter. It also passes the [Discount] returned from Valuecard which will be populated in the Valuecard [NewBenefits] parameter.\n\nIf the transaction is completed successfully, the POS will read the function Closing the Transaction and print the [PrintMessage] that Valuecard returned at the Commit stage along with the receipt.\n\nIf payment did not go through, a request to cancel the entire transaction will be sent.\n\nWhen a transaction is successfully closed, it returns a new [TransactionID] which is saved in the POS and used for internal reporting, returning items or voiding the transaction as necessary.\n"
       }
     }
   },
