@@ -247,11 +247,6 @@
                 "schema": {
                   "$ref": "#/components/schemas/SpClubMemberDetailsResult"
                 }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SpClubMemberDetailsResult"
-                }
               }
             }
           }
