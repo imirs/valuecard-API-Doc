@@ -1599,6 +1599,19 @@
             "$ref": "#/components/schemas/VcBaseResponse"
           }
         }
+      },
+      "AuthenticateMemberParameter": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "celPhone": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       }
     },
     "securitySchemes": {
