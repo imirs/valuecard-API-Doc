@@ -159,6 +159,64 @@
         ]
       }
     },
+        "/pos/club_member/RegisterClubMemberEx": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterClubMemberParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Member/User"
+        ],
+        "summary": "Club Member Register",
+        "description": "This operation is run by the POS operator to register a customer as a new member of their loyalty program. The POS operator will be asked if the customer is a club member. If the customer is not a club member, there will be an option to transfer to New Member Registration.\n\nThe new member’s card number can then be linked to the transaction using the output parameter [MemberCardNumber].\nIn the registration screen, the new member can choose whether the primary identifier should be the card number or their phone number. The default is phone number. If they select card number as the primary identifier, they will be asked to swipe the card. If a cellphone number is selected, the number is entered in the appropriate field and the value of -1 (negative 1) is passed to the [Card Number] parameter.\n\nThe new member will be asked to fill in personal details including name, phone number, address, email, birthday and anniversary.\n\nIf the registration succeeds the [PrintMessage] is displayed on the POS. If it fails, an error message will be displayed.\n\nOnce the new member is registered, the card will be linked to the current transaction. The linking identifier will be [CardNumber] which will be returned to from the registration process, whether the registration was done using a real or virtual card.\n\nIn general, for any action other than client registration, if error message -1059 is returned, a registration form will be prompted.",
+        "operationId": "205"
+      }
+    },
     "/pos/club_member/UpdateClubMember": {
       "post": {
         "requestBody": {
@@ -325,64 +383,7 @@
         ]
       }
     },
-    "/pos/club_member/RegisterClubMemberEx": {
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterClubMemberParameters"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegisterClubMemberExResponse"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
-              },
-              "multipart/form-data": {
-                "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Member/User"
-        ],
-        "summary": "Club Member Register",
-        "description": "This operation is run by the POS operator to register a customer as a new member of their loyalty program. The POS operator will be asked if the customer is a club member. If the customer is not a club member, there will be an option to transfer to New Member Registration.\n\nThe new member’s card number can then be linked to the transaction using the output parameter [MemberCardNumber].\nIn the registration screen, the new member can choose whether the primary identifier should be the card number or their phone number. The default is phone number. If they select card number as the primary identifier, they will be asked to swipe the card. If a cellphone number is selected, the number is entered in the appropriate field and the value of -1 (negative 1) is passed to the [Card Number] parameter.\n\nThe new member will be asked to fill in personal details including name, phone number, address, email, birthday and anniversary.\n\nIf the registration succeeds the [PrintMessage] is displayed on the POS. If it fails, an error message will be displayed.\n\nOnce the new member is registered, the card will be linked to the current transaction. The linking identifier will be [CardNumber] which will be returned to from the registration process, whether the registration was done using a real or virtual card.\n\nIn general, for any action other than client registration, if error message -1059 is returned, a registration form will be prompted.",
-        "operationId": "205"
-      }
-    },
+
     "/pos/club_member/ClubMemberDetails": {
       "get": {
         "parameters": [
