@@ -482,7 +482,7 @@
         "summary": "Club Member Details",
         "security": [
           {
-            "Barerr": []
+            "Bearer": []
           }
         ]
       }
@@ -536,7 +536,7 @@
         ],
         "security": [
           {
-            "Barerr": []
+            "Bearer": []
           }
         ]
       }
@@ -586,7 +586,7 @@
         "description": "After payment is confirmed from the LoadBudget Query, the POS will call the LoadBudgetCommitQuery and upon receiving a positive response, the amount paid will be recorded as a receipt only and will not issue an invoice.",
         "security": [
           {
-            "Barerr": []
+            "Bearer": []
           }
         ]
       }
@@ -636,7 +636,7 @@
         "description": "This operation is used by the POS operator to load money on to the Valuecard. This is different from a regular sales transaction because the money is being transfered onto the card but is not yet considered income. It stays open until the payment is confirmed using \n[LoadBudgetCommitQuery](#tag/Budget/paths/~1pos~1budget~1LoadBudgetCommitQuery/post).\n\nThe POS operator clicks Load Budget. The Search Screen is opened (see section ‎3, “Member and Card Search”). Once a card is identified, a new transaction is created and the POS operator enters the amount to load. The POS operator clicks Confirm and the Web service LoadBudgetQuery is called.",
         "security": [
           {
-            "Barerr": []
+            "Bearer": []
           }
         ]
       }
@@ -687,7 +687,7 @@
         "parameters": [],
         "security": [
           {
-            "Barerr": []
+            "Bearer": []
           }
         ]
       }
@@ -1641,7 +1641,7 @@
       }
     },
     "securitySchemes": {
-      "Barerr": {
+      "Bearer": {
         "name": "API Key",
         "type": "apiKey",
         "in": "header"
